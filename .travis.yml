@@ -1,0 +1,24 @@
+language: go
+script: true
+
+install:
+  - go get github.com/InkProject/ink
+
+script:
+  - ink build
+  - echo 'ink build done!'
+
+after_script:
+  - cd ./public
+  - git init
+  - git config user.name "zsy"
+  - git config user.email "zsy@mzsy.ml"
+  - git add .
+  - git commit -m "update blogs"
+  # Github Pages
+  - git push --force --quiet "https://${GH_TOKEN}@${Github_REF}" master:master 
+
+env:
+ global:
+   # Github Pages
+   - Github_REF: github.com/zsy-cn/zsy-cn.github.io

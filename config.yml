@@ -1,0 +1,25 @@
+site:
+    title: Xavier's Blog
+    subtitle: 做更美好的自己
+    limit: 9
+    theme: ink-theme-me
+    comment: username
+    root: "/blog"
+    lang: en #Support en, zh, ru, ja, Configurable in theme/lang.yml
+    url: "http://zsy-cn.github.io/blog/"
+    #link: Article Link Scheme #Default Is {title}.html，Support {year},{month},{day},{hour},{minute},{second},{title} Variables
+    logo: "-/images/avatar.png"
+
+authors:
+    AuthorID:
+        name: "xavier"
+        intro: "傳統文化傳承者"
+        avatar: "-/images/avatar.png"
+
+build:
+    #output: Build Output Directory #Optional, Default is "public"
+    port: 8000
+    copy:
+        - "source/images"
+    publish: |
+        Excuted command when use 'ink publish'
