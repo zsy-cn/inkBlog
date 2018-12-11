@@ -4,7 +4,7 @@ site:
     limit: 9
     theme: ink-theme-me
     comment: username
-    root: "/blog"
+    #root: "/blog"
     lang: en #Support en, zh, ru, ja, Configurable in theme/lang.yml
     url: "http://zsy-cn.github.io/blog/"
     #link: Article Link Scheme #Default Is {title}.html，Support {year},{month},{day},{hour},{minute},{second},{title} Variables
