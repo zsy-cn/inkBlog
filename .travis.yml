@@ -2,7 +2,7 @@ language: go
 script: true
 
 install:
-  - go get github.com/InkProject/ink
+  - go get github.com/zsy-cn/ink
 
 script:
   - ink build
@@ -11,10 +11,10 @@ script:
 after_script:
   - cd ./public
   - git init
-  - git config user.name "zsy"
-  - git config user.email "zsy@mzsy.ml"
+  - git config user.name "zsy-cn"
+  - git config user.email "zsy@iotinit.com"
   - git add .
-  - git commit -m "update blogs"
+  - git commit -m "update blog"
   # Github Pages
   - git push --force --quiet "https://${GH_TOKEN}@${Github_REF}" master:master 
 

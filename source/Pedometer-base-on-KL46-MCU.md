@@ -1,9 +1,12 @@
 title: 基于KL46的计步器设计
 date: 2015-06-03 10:10:10 
+update: 2020-03-22 00:00:00 +0800
 author: Xavier
+cover: "-/images/pedometer/image5.png"
 tags: 
     - pedometer
 type: article
+preview: 开源软硬件在 [ Pedometer ](https://github.com/zsy-cn/Pedometer)。
 ---
 	
 ### 引言
