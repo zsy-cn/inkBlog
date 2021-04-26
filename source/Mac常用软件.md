@@ -62,5 +62,7 @@ type: article
 ```
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
+### [NTFSX](https://github.com/Sailiy/ntfsx)
+开源NTFS挂载工具
 
 转载请注明：[Xavier's Blog](https://zsy-cn.github.io) » [Mac常用软件](https://zsy-cn.github.io/Mac常用软件.html/) 、

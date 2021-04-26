@@ -1,5 +1,9 @@
 ink-theme-me/node_modules
 ink-theme-me/npm-debug.log
 ink-theme-me/package.json
+ink-theme-me/yarn.lock
+
+node_modules/
 public/
+
 .DS_Store
