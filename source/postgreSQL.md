@@ -16,7 +16,7 @@ docker pull postgres:<tag>
 
 docker run --name <contanerName> -e POSTGRES_PASSWORD=<yourPassword> -p hostPort:containerPort -d postgres:<tag>
 
-docker run --name sws-iot-pq -e POSTGRES_PASSWORD=swsiot -p 18286:5432 -d postgres
+docker run --name iot-pq -e POSTGRES_PASSWORD=iot -p 5432:5432 -d postgres
 
     –name 指定容器名称。
     -e 指定环境变量，POSTGRES_PASSWORD 是 postgres 的数据库密码。
@@ -47,9 +47,9 @@ createdb和dropdb可以指定主机，用户名，密码等参数，用于连接
 
 ## 创建用户及数据库
 
-    postgres=# CREATE USER swsiot WITH PASSWORD 'swsiot';
+    postgres=# CREATE USER iot WITH PASSWORD 'iot';
     CREATE ROLE
-    postgres=# CREATE DATABASE swsiot OWNER swsiot;
+    postgres=# CREATE DATABASE iot OWNER iot;
     CREATE DATABASE
 
 ## 远程登录，远程登录配置参照：linux下postgresql远程登录
