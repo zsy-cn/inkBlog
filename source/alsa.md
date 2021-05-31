@@ -1,12 +1,13 @@
 title: ALSA
-date: 2019-07-07 00:10:10 
+date: 2019-07-07 00:10:10
 author: Xavier
-tags: 
-    - alsa
+tags: - alsa
 type: article
+
 ---
 
 # amixer
+
 ```
 root@TinaLinux:~# amixer controls
 numid=105,iface=MIXER,name='Headphone Switch'
@@ -116,11 +117,17 @@ numid=7,iface=MIXER,name='phonein pre-amplifier gain'
 numid=8,iface=MIXER,name='phonein(p-n) to L_R output mixer gain'
 numid=3,iface=MIXER,name='phoneout volume'
 ```
+
 ```
 amixer cset numid=1,iface=MIXER,name='headphone volume' 30
 amixer set 'headphone volume' 80%
 ```
+
 ```
 amixer cget numid=1,iface=MIXER,name='headphone volume'
 amixer get 'headphone volume'
 ```
+
+# arecord
+
+arecord -D hw:M8,0 -r 16000 -f S16_LE -t raw -c 8 -d 20 speech8.pcm
