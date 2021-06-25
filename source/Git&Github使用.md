@@ -1,34 +1,42 @@
-title: Git&Github使用
-date: 2019-05-13 00:10:10 
+title: Git&Github 使用
+date: 2019-05-13 00:10:10
 author: Xavier
-tags: 
-    - Git
-    - Github
-    - 版本控制
+tags: - Git - Github - 版本控制
 type: article
+
 ---
 
-## Git环境搭建
-### 安装Git
+## Git 环境搭建
+
+### 安装 Git
+
 brew install git
-### 设置Git信息
+
+### 设置 Git 信息
+
 ```
 git config --global user.name "XXX"
 git config --global user.email XXX
 ```
 
-## Github环境搭建
-### 安装GitHub Desktop
+## Github 环境搭建
+
+### 安装 GitHub Desktop
+
 [官网](https://desktop.github.com/)下载安装
-### 配置SSH
+
+### 配置 SSH
+
 ```
 ssh-keygen -t rsa -C "邮箱"
 一直Enter，共三步
 cd ~/.ssh
 cat id_rsa.pub
 ```
-复制出来，贴到Github的SSH处
-### 修改提交方式为SSH
+
+复制出来，贴到 Github 的 SSH 处
+
+### 修改提交方式为 SSH
 
 ```
 $ git config --global url."git@mygitlab.com:".insteadOf "http://mygitlab.com/"
@@ -39,13 +47,15 @@ $ cat ~/.gitconfig
 [url "git@mygitlab.com:"]
     insteadOf = http://mygitlab.com/
 ```
-由于git 的仓库 进行初始化 的时候配置的是 https 的方式，
+
+由于 git 的仓库 进行初始化 的时候配置的是 https 的方式，
 
 在 git push 的时候每次都要输入用户名 跟 密码。非常的不方便，
 
 究其原因，该配置是在 ./git/config 文件中配置的
 
 https 方式：
+
 ```
 [core]
 	repositoryformatversion = 0
@@ -64,6 +74,7 @@ https 方式：
 ```
 
 git 方式：
+
 ```
 [core]
 	repositoryformatversion = 0
@@ -83,14 +94,18 @@ git 方式：
 	wmstate = normal
 	geometry = 835x475+182+182 185 214
 ```
+
 只要将
+
 ```
 https: 
 [remote "origin"]
    url = https://git.coding.net/asun_coder/DMP_JavaBackground.git
   fetch = +refs/heads/*:refs/remotes/origin/*
 ```
+
 转换成
+
 ```
 ssh:
 [remote "origin"]
@@ -98,4 +113,8 @@ ssh:
   fetch = +refs/heads/*:refs/remotes/origin/*
 ```
 
-转载请注明：[Xavier's Blog](https://zsy-cn.github.io) » [Git&Github使用](https://zsy-cn.github.io/Git&Github使用.html/)
+```
+git push --mirror github
+```
+
+转载请注明：[Xavier's Blog](https://zsy-cn.github.io) » [Git&Github 使用](https://zsy-cn.github.io/Git&Github使用.html/)

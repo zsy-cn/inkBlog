@@ -1,9 +1,9 @@
 title: PostgreSQL
-date: 2019-05-12 10:10:10 
+date: 2019-05-12 10:10:10
 author: Xavier
-tags: 
-    - PostgreSQL
+tags: - PostgreSQL
 type: article
+
 ---
 
 # PostgreSQL 数据库
@@ -34,7 +34,7 @@ docker exec -it <containerID> psql -h <postgresqlIp> -U postgres
 
 docker exec -it 15df572789f6 psql -h localhost -U postgres
 
-## createdb和dropdb创建、删除数据库
+## createdb 和 dropdb 创建、删除数据库
 
     切换到pg用户
     su - pg
@@ -43,7 +43,7 @@ docker exec -it 15df572789f6 psql -h localhost -U postgres
     删除数据库mydb
     dropdb mydb
 
-createdb和dropdb可以指定主机，用户名，密码等参数，用于连接PostgreSQL服务器，以上示例没有指定，默认使用操作系统当前用户pg，而pg用户也是启动数据库服务的用户，因此有权限创建和删除数据库。
+createdb 和 dropdb 可以指定主机，用户名，密码等参数，用于连接 PostgreSQL 服务器，以上示例没有指定，默认使用操作系统当前用户 pg，而 pg 用户也是启动数据库服务的用户，因此有权限创建和删除数据库。
 
 ## 创建用户及数据库
 
@@ -52,7 +52,7 @@ createdb和dropdb可以指定主机，用户名，密码等参数，用于连接
     postgres=# CREATE DATABASE iot OWNER iot;
     CREATE DATABASE
 
-## 远程登录，远程登录配置参照：linux下postgresql远程登录
+## 远程登录，远程登录配置参照：linux 下 postgresql 远程登录
 
      psql -hx.x.x.x -p5432 -W    #登录命令
      enter password
@@ -73,4 +73,33 @@ select table_name, column_name,
 from information_schema.columns
 where table_schema='public'
 order by table_name, ordinal_position;
+```
+
+Postgresql 设置时区
+greatau 2020-11-10 09:12:26 876 收藏
+分类专栏： postgreSQL 文章标签： postgresql
+版权
+
+1. 查看时区
+
+```sql
+show time zone;
+```
+
+2. 查看时间
+
+```sql
+select now();
+```
+
+3. 查看支持的时区列表
+
+```sql
+select \* from pg_timezone_names;
+```
+
+4.设置成东八区 北京时间 UTC+8
+
+```sql
+set time zone 'PRC';
 ```
