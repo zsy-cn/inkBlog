@@ -53,3 +53,19 @@ hackrf_transfer -t gpssim.bin -f 1575420000 -s 2600000 -a 1 -x 20 -R
 ```
 
 就能实现实时 GPS 发射了，但是目前只有 LimeSDR-USB 比较稳定，limesdr mini 实时发射不稳定，只能发射录制文件
+
+## HackRF 固件更新
+
+进入 firmware-bin 目录（cd firmware-bin），执行以下操作
+
+1）更新 Flash
+
+```
+hackrf_spiflash -w hackrf_one_usb.bin
+```
+
+2）更新 CPLD
+
+```
+hackrf_cpldjtag -x hackrf_cpld_default.xsvf
+```

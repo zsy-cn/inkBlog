@@ -144,6 +144,7 @@ service_started 用于判断进程是否启动成功
 
 vim /etc/init.d/zdetect
 
+```
 #!/bin/sh /etc/rc.common
 USE_PROCD=1
 
@@ -158,9 +159,10 @@ procd_set_param respawn
 procd_set_param limits core="unlimited"
 }
 
-        procd_close_instance
+    procd_close_instance
 
 }
+```
 
 vim /etc/init.d/zboard
 
@@ -169,5 +171,256 @@ vim /etc/init.d/zboard
         链接命令如下：ln -s ../init.d/wakeup /etc/rc.d/S98wakeup
 
         重启搞定~
+
+## openwrt 升级系统
+
+md5 校验，确保下载的固件完整:
+
+```sh
+    root@OpenWrt:/tmp# wget http://downloads.openwrt.org/snapshots/trunk/ar71xx/md5sums
+    root@OpenWrt:/tmp# md5sum -c md5sums 2> /dev/null | grep OK
+    openwrt-ar71xx-generic-tl-wr2543-v1-squashfs-sysupgrade.bin: OK
+```
+
+OpenWrt sysupgrade 命令升级 OpenWrt 固件
+
+```sh
+    root@OpenWrt:/tmp# sysupgrade -v openwrt-ar71xx-generic-tl-wr2543-v1-squashfs-sysupgrade.bin
+    ...
+    Upgrade completed
+    Rebooting system...
+```
+
+## openwrt 升级软件
+
+opkg update
+opkg list-upgradable | cut -f 1 -d ' ' | xargs opkg upgrade
+
+## 参看资料
+
+https://openwrt.io/docs/opkg/#gee-ralink-opkg-j1s-j2-j3
+
+## OpenWrt 编译后生成的 bin 文件：jffs2 与 squashfs、factory 与 sysupgrade
+
+OpenWrt 编译后会生成多个 bin 文件，比如
+
+    openwrt-ar71xx-generic-tl-wr841nd-jffs2-factory.bin　　　　　 8126464
+    openwrt-ar71xx-generic-tl-wr841nd-jffs2-sysupgrade.bin　　   4980740
+    openwrt-ar71xx-generic-tl-wr841nd-squashfs-factory.bin　　　8126464
+    openwrt-ar71xx-generic-tl-wr841nd-squashfs-sysupgrade.bin  3538948
+
+bin 文件名称中有两种不同的格式，jffs2 与 squashfs。这两种格式的固件区别在于，squashfs 格式的 bin 文件安装后，会占用一定的空间来存放系统的一些必要文件，这些文件都只是可读的，其作用是帮助恢复系统。当 OpenWrt 崩溃时，可以基于这些文件，使用 firstboot 脚本重建初始系统，而 jffs2 则不会存储这样的文件，好处是节省了空间。一般使用 squashfs 格式的固件，方便恢复系统到初始状态。
+
+每种格式都有两个文件，factory 与 sysupgrade，这两者的区别是，factory 多了一些验证的东西，用于在原厂固件的基础上进行升级，如果已经是 OpenWrt，直接使用 sysupgrade 文件即可。并且，在原厂固件的基础上进行升级时，首先使用 factory 文件，然后需要再次使用 sysupgrade 文件，选择不保留原来配置进行升级。
+
+## Openwrt 产品安全初步
+
+```
+•	更改系统密码、无线密码
+•	更改ssh端口
+	/package/network/services/dropbear/dropbear.config 177
+•	更换web页面端口
+	/package/network/services/uhttpd/uhttpd.config
+•	关闭串口控制台登录
+	/target/linux/ar71xx/base-files/etc/inittab
+•	关闭串口内核打印输出
+	/target/linux/ar71xx/image/legacy.mk
+	关闭内核打印也就没有控制台了
+	AP147_010,ap147-010,AP147-010,none,115200,$$(ap147_mtdlayout),RkuImage
+•	去掉生成备份功能、ssh端口页面、修改密码页面
+	./feeds/luci/modules/luci-mod-admin-full/luasrc/controller
+	./feeds/luci/modules/luci-mod-admin-full/luasrc/view
+```
+
+## openwrt ssh
+
+• 更改 ssh 端口
+/package/network/services/dropbear/dropbear.config 177
+
+### sys_partition.fex
+
+```
+;---------------------------------------------------------------------------------------------------
+; 说明： 脚本中的字符串区分大小写，用户可以修改"="后面的数值，但是不要修改前面的字符串
+;---------------------------------------------------------------------------------------------------
+
+
+;---------------------------------------------------------------------------------------------------
+;                                   固件下载参数配置
+;---------------------------------------------------------------------------------------------------
+;***************************************************************************************************
+;    mbr的大小, 以Kbyte为单位
+;***************************************************************************************************
+[mbr]
+size = 16384
+
+;***************************************************************************************************
+;                                              分区配置
+;
+;
+;  partition 定义范例:
+;    [partition]                ;  //表示是一个分区
+;    name        = USERFS2      ; //分区名称
+;    size        = 16384        ; //分区大小 单位: 扇区.分区表示个数最多2^31 * 512 = 2T
+;    downloadfile = "123.fex"   ; //下载文件的路径和名称，可以使用相对路径，相对是指相对于image.cfg文件所在分区。也可以使用绝对路径
+;    keydata     = 1            ; //私有数据分区，重新量产数据将不丢失
+;    encrypt     = 1            ; //采用加密方式烧录，将提供数据加密，但损失烧录速度
+;	   = ?            ; //私有用法
+;    verify      = 1            ; //要求量产完成后校验是否正确
+;
+; 注：1、name唯一, 不允许同名
+;     2、name最大12个字符
+;     3、size = 0, 将创建一个无大小的空分区
+;     4、为了安全和效率考虑，分区大小最好保证为16M字节的整数倍
+;   recovery分区说明
+;   如果启用了OTA升级，默认以boot_initramfs.img作为recovery.fex，否则recovery.fex为空
+
+;***************************************************************************************************
+[partition_start]
+
+[partition]
+    name         = boot-res
+    size         = 262144
+    downloadfile = "boot-resource.fex"
+    user_type    = 0x8000
+
+[partition]
+    name         = env
+    size         = 2048
+    downloadfile = "env.fex"
+    user_type    = 0x8000
+
+[partition]
+    name         = boot
+    size         = 524288
+    downloadfile = "boot.fex"
+    user_type    = 0x8000
+
+[partition]
+    name         = rootfs
+    size         = 524288
+    downloadfile = "rootfs.fex"
+    user_type    = 0x8000
+
+[partition]
+    name         = rootfs_data
+    size         = 1048576
+    user_type    = 0x8000
+
+[partition]
+    name         = private
+    size         = 32768
+    user_type    = 0x8000
+    keydata      = 1
+
+[partition]
+    name         = recovery
+    size         = 524288
+    downloadfile = "recovery.fex"
+    user_type    = 0x8000
+
+[partition]
+    name         = misc
+    size         = 2048
+    user_type    = 0x8000
+
+[partition]
+    name         = UDISK
+    user_type    = 0x8100
+```
+
+```
+;---------------------------------------------------------------------------------------------------
+; 说明： 脚本中的字符串区分大小写，用户可以修改"="后面的数值，但是不要修改前面的字符串
+;---------------------------------------------------------------------------------------------------
+
+
+;---------------------------------------------------------------------------------------------------
+;                                   固件下载参数配置
+;---------------------------------------------------------------------------------------------------
+;***************************************************************************************************
+;    mbr的大小, 以Kbyte为单位
+;***************************************************************************************************
+[mbr]
+size = 16384
+
+;***************************************************************************************************
+;                                              分区配置
+;
+;
+;  partition 定义范例:
+;    [partition]                ;  //表示是一个分区
+;    name        = USERFS2      ; //分区名称
+;    size        = 16384        ; //分区大小 单位: 扇区.分区表示个数最多2^31 * 512 = 2T
+;    downloadfile = "123.fex"   ; //下载文件的路径和名称，可以使用相对路径，相对是指相对于image.cfg文件所在分区。也可以使用绝对路径
+;    keydata     = 1            ; //私有数据分区，重新量产数据将不丢失
+;    encrypt     = 1            ; //采用加密方式烧录，将提供数据加密，但损失烧录速度
+;	   = ?            ; //私有用法
+;    verify      = 1            ; //要求量产完成后校验是否正确
+;
+; 注：1、name唯一, 不允许同名
+;     2、name最大12个字符
+;     3、size = 0, 将创建一个无大小的空分区
+;     4、为了安全和效率考虑，分区大小最好保证为16M字节的整数倍
+;   recovery分区说明
+;   如果启用了OTA升级，默认以boot_initramfs.img作为recovery.fex，否则recovery.fex为空
+
+;***************************************************************************************************
+[partition_start]
+
+[partition]
+    name         = boot-res
+    size         = 16384
+    downloadfile = "boot-resource.fex"
+    user_type    = 0x8000
+
+[partition]
+    name         = env
+    size         = 2048
+    downloadfile = "env.fex"
+    user_type    = 0x8000
+
+[partition]
+    name         = boot
+    size         = 32768
+    downloadfile = "boot.fex"
+    user_type    = 0x8000
+
+[partition]
+    name         = rootfs
+    size         = 262144
+    downloadfile = "rootfs.fex"
+    user_type    = 0x8000
+
+[partition]
+    name         = rootfs_data
+    size         = 786432
+    user_type    = 0x8000
+
+[partition]
+    name         = private
+    size         = 32768
+    user_type    = 0x8000
+    keydata      = 1
+
+[partition]
+    name         = recovery
+    size         = 32768
+	downloadfile = "recovery.fex"
+    user_type    = 0x8000
+
+[partition]
+    name         = misc
+    size         = 2048
+    user_type    = 0x8000
+
+[partition]
+    name         = UDISK
+    user_type    = 0x8100
+```
+
+## make download
+
+可以先将包下载下来在进行编译
 
 转载请注明：[Xavier's Blog](https://zsy-cn.github.io) » [OpenWRT 讲解](https://zsy-cn.github.io/OpenWRT-awesome.html/)
