@@ -57,3 +57,20 @@ opkg install mypackage
 
 总结
 容易出问题的就是密钥这部分，其他的都还是很直接的。
+
+```
+# 使用说明
+1./etc/opkg 目录下面customfeeds.conf添加这段
+option http_proxy http://xl:iubYyM3rZZSpCCBlJnQVaEz5igkYV5FTIZsqwWsuuKIUU4dhTSd98bNQpHyCtJZKoQv5Es02LZzS2vxxI@openwrt.ery-data.com:17777
+src/gz sinkcup  http://mirror.ery-data.com/openwrt/packages
+
+在distfeeds.conf 注释掉
+#src/gz %n_base /base
+#src/gz %n_kernel /kernel
+
+
+
+2. opkg update # 更新索引文件
+3. opkg list | grep htop # 查询htop软件的基本信息
+4.opkg install htop	#安装htop
+```

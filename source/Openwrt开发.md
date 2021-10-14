@@ -51,7 +51,7 @@ mkdir -p mycategory/mysubcategory/mypackage
 
 在 mypackage 中创建名为 Makefile 的文件，写入：
 
-```
+```makefile
 # 固定写法，TOPDIR 是指 openwrt 目录
 
 include $(TOPDIR)/rules.mk
@@ -199,7 +199,7 @@ chmod +x mypackage
 
 修改刚创建的 mypackage 文件，这里用了 procd 工具，最简单的写法只需要定义 start_service：
 
-```
+```sh
 #!/bin/sh /etc/rc.common
 
 # 参考 https://openwrt.org/docs/guide-developer/procd-init-scripts
@@ -288,7 +288,7 @@ endef
 
 如果不想有这样的行为，也可以用 preinst 和 postinst 脚本来完成这个功能：
 
-```
+```sh
 # 注意这段内容里面整个是个脚本，所以 #!/bin/sh 不能少
 
 define Package/mypackage/preinst

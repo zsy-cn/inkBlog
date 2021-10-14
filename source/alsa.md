@@ -130,4 +130,11 @@ amixer get 'headphone volume'
 
 # arecord
 
-arecord -D hw:M8,0 -r 16000 -f S16_LE -t raw -c 8 -d 20 speech8.pcm
+arecord -D hw:M8,0 -r 16000 -f S16_LE -t raw -c 8 -d 10 speech8.pcm
+
+# aplay
+
+aplay -D hw:sndcodec,0 -f S16_LE -r 16000 -c 2 a.wav
+
+beforming_ULA_asr_ch4_2_mic4_35mm_dirWavOff_vpOff.bin
+AEC_ch8-2-ch4_2ref_v2_outgain4_d1_amth0.0002_2021_1_25.bin
